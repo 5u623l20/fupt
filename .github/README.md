@@ -13,6 +13,44 @@ backward compatibility of may not be ready yet for upgrade or migration.
 Hence this tree allows us to keep older ports in a community repository
 and give the users some additional time to migrate or use.
 
+## Installation and Usages
+
+This needs to be used with
+[poudriere](https://freshports.org/ports-mgmt/poudriere-devel). Although so
+many will ask why not with ports but the ports team will slowly phase out
+support for ports for end users. Ports tree will be there as that is the heart
+of the entire pkg sets of the FreeBSD Operating System but there will be no
+support available as it is difficult to reproduce the same environment for a
+committer and debug the problem whereas if the end user uses poudriere the
+builds are done in a clean environment and is reproducible and easier to debug
+for a developer or a ports committer.
+
+### Install poudriere
+```
+pkg install poudriere-devel
+```
+
+### Create a jail
+```
+poudriere jail -c -j 132amd64 -V 13.2-RELEASE
+```
+
+### Create the official ports tree
+```
+poudriere ports -c
+```
+
+### Create the Community ports tree
+```
+poudriere ports -c -p fupt -m git+https -U https://github.com/freebsd/fupt.git
+```
+### Build a port from the Community tree
+Considering a ports `games/mario` in the Community tree the following commands
+will build the port:
+```
+poudriere bulk -j 132amd64 -p defaults -O fupt games/mario
+```
+
 ## Frequently Asked Questions (FAQ)
 
 ### Why was my port deleted from the official ports tree and moved here?
